@@ -8,7 +8,6 @@ import io
 import win32clipboard
 from PIL import ImageGrab
 
-# Global variables
 ruler_lengths = []
 ruler_start_x = 0
 ruler_start_y = 0
@@ -16,37 +15,29 @@ is_button_pressed = False
 lines = []
 text_labels = []
 
-# Tkinter window setup
 root = tk.Tk()
 root.title('Pixel Information')
 root.configure(bg='#000000')
 
-# Style configuration
 style = ttk.Style()
 style.configure('TLabel', background='#2e2e2e', foreground='black', font=('Arial', 14, 'bold'))
 style.configure('TButton', font=('Arial', 12, 'bold'), padding=10)
 
-# GUI for pixel information
 frame = ttk.Frame(root, padding=20)
 frame.pack(pady=20)
 
-# Title label
 title_label = ttk.Label(frame, text='Mouse Information:', font=('Arial', 16, 'bold'), foreground='pink', background='#2e2e2e')
 title_label.pack(pady=5)
 
-# Separator line
 separator = ttk.Label(frame, text='-' * 30, background='#2e2e2e', foreground='white')
 separator.pack(pady=5)
 
-# Position label
 coord_label = ttk.Label(frame, text='Position: (0, 0)', background='#3a3a3a', foreground='white', font=('Arial', 14))
 coord_label.pack(pady=5, padx=10, fill=tk.X)
 
-# Color label
 color_label = ttk.Label(frame, text='Colour: #000000', background='#3a3a3a', foreground='white', font=('Arial', 14))
 color_label.pack(pady=5, padx=10, fill=tk.X)
 
-# Overlay window and canvas declarations
 overlay_window = None
 overlay_canvas = None
 
@@ -61,21 +52,16 @@ def spawn_canvas():
     overlay_canvas = tk.Canvas(overlay_window, bg="#1e1e1e", highlightthickness=0)
     overlay_canvas.pack(fill="both", expand=True)
 
-    # Set the overlay to be translucent
     overlay_window.attributes("-alpha", 0.7)
 
-    # Add a button to take a screenshot and close the canvas
     screenshot_button = ttk.Button(overlay_canvas, text="Take Screenshot", command=take_screenshot_and_close)
     screenshot_button.grid(row=1, column=0, sticky="nsew")
 
-    # Bind mouse motion to the overlay canvas
     overlay_canvas.bind("<Motion>", lambda event: on_move(event.x, event.y))
 
-    # Start listening for mouse clicks
     listener = Listener(on_click=on_click)
     listener.start()
 
-    # Focus on the canvas to capture mouse events
     overlay_canvas.focus_set()
 
 def take_screenshot_and_close():
@@ -139,10 +125,8 @@ def get_pixel_info():
     color_label.config(text=f'Colour: {hex_color}')
     root.after(100, get_pixel_info)
 
-# Bind 's' key to spawn the canvas and 'f' key to close the pixel info window
 root.bind('s', lambda event: spawn_canvas())
 root.bind('<f>', lambda event: root.destroy())
 
-# Start the main event loop
 get_pixel_info()
 root.mainloop()
